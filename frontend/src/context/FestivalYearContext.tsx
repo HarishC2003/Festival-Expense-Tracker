@@ -88,7 +88,7 @@ export const FestivalYearProvider: React.FC<{ children: React.ReactNode }> = ({ 
             });
           }
         } else {
-          const res = await fetch(`http://localhost:3001/api/festivals/auto-init`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/festivals/auto-init`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${session?.access_token}`,

@@ -47,7 +47,7 @@ export const YearsPage: React.FC = () => {
     const token = (await supabase.auth.getSession()).data.session?.access_token;
     
     try {
-      const response = await fetch(`http://localhost:3001/api/festivals/years/${yearId}/lock`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/festivals/years/${yearId}/lock`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -82,7 +82,7 @@ export const YearsPage: React.FC = () => {
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/festivals/years`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/festivals/years`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,6 +14,7 @@ import { SessionExpiredModal } from './components/states/SessionExpiredModal';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { VerifyOTPPage } from './pages/auth/VerifyOTPPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { LandingPage } from './pages/LandingPage';
 import { YearsPage } from './pages/festivals/YearsPage';
@@ -70,6 +71,7 @@ function App() {
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/verify-otp" element={<VerifyOTPPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   <Route path="/security" element={<SecurityPage />} />
                   <Route path="/privacy" element={<PrivacyPolicyPage />} />
                   <Route path="/about" element={<AboutPage />} />

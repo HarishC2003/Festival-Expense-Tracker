@@ -28,7 +28,7 @@ export const DashboardPage: React.FC = () => {
     setError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/dashboard/summary?yearId=${activeYear.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/dashboard/summary?yearId=${activeYear.id}`, {
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
           'X-Group-Id': activeGroupId || ''

@@ -39,7 +39,7 @@ export const TransactionsPage: React.FC = () => {
       setLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       
-      let url = `http://localhost:3001/api/dashboard/transactions?yearId=${activeYear.id}`;
+      let url = `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/dashboard/transactions?yearId=${activeYear.id}`;
       if (startDate) url += `&startDate=${startDate}`;
       if (endDate) url += `&endDate=${endDate}`;
 

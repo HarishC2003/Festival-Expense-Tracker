@@ -32,7 +32,7 @@ export const DonorAutocomplete: React.FC<DonorAutocompleteProps> = ({ value, onC
   useEffect(() => {
     const fetchDonors = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/income/donors/search?q=${search}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/donors/search?q=${search}`, {
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
           'X-Group-Id': activeGroupId || ''
@@ -54,7 +54,7 @@ export const DonorAutocomplete: React.FC<DonorAutocompleteProps> = ({ value, onC
   const handleCreateDonor = async (e: React.FormEvent) => {
     e.preventDefault();
     const { data: { session } } = await supabase.auth.getSession();
-    const res = await fetch(`http://localhost:3001/api/income/donors`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/donors`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

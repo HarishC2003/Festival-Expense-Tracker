@@ -55,9 +55,9 @@ export const ItemDonationsPage: React.FC = () => {
       };
       
       const [donRes, catRes, unitRes] = await Promise.all([
-        fetch(`http://localhost:3001/api/income/item_donations?yearId=${activeYear.id}`, { headers }),
-        fetch(`http://localhost:3001/api/master-data/income_categories?yearId=${activeYear.id}`, { headers }),
-        fetch(`http://localhost:3001/api/master-data/units?yearId=${activeYear.id}`, { headers })
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/item_donations?yearId=${activeYear.id}`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/income_categories?yearId=${activeYear.id}`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/units?yearId=${activeYear.id}`, { headers })
       ]);
       
       setDonations(await donRes.json());
@@ -82,8 +82,8 @@ export const ItemDonationsPage: React.FC = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const url = editingId 
-        ? `http://localhost:3001/api/income/item_donations/${editingId}`
-        : `http://localhost:3001/api/income/item_donations`;
+        ? `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/item_donations/${editingId}`
+        : `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/item_donations`;
         
       const res = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',
@@ -156,7 +156,7 @@ export const ItemDonationsPage: React.FC = () => {
       onConfirm: async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          const res = await fetch(`http://localhost:3001/api/income/item_donations/${id}`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/item_donations/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${session?.access_token}`,

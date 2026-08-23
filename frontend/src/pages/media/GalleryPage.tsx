@@ -31,7 +31,7 @@ export const GalleryPage: React.FC = () => {
   const fetchAlbums = async () => {
     if (!activeYear) return;
     const { data: { session } } = await supabase.auth.getSession();
-    const res = await fetch(`http://localhost:3001/api/media/albums?yearId=${activeYear.id}`, { 
+    const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/albums?yearId=${activeYear.id}`, { 
       headers: { 
         'Authorization': `Bearer ${session?.access_token}`,
         'X-Group-Id': activeGroupId || ''
@@ -42,7 +42,7 @@ export const GalleryPage: React.FC = () => {
 
   const fetchItems = async (albumId: string) => {
     const { data: { session } } = await supabase.auth.getSession();
-    const res = await fetch(`http://localhost:3001/api/media/gallery?albumId=${albumId}`, { 
+    const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/gallery?albumId=${albumId}`, { 
       headers: { 
         'Authorization': `Bearer ${session?.access_token}`,
         'X-Group-Id': activeGroupId || ''
@@ -64,7 +64,7 @@ export const GalleryPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/media/albums`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/albums`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
@@ -108,7 +108,7 @@ export const GalleryPage: React.FC = () => {
         const { data, error } = await supabase.storage.from('gallery').upload(`${activeYear?.id}/${selectedAlbum.id}/${Math.random()}_${file.name}`, file);
         if (!error && data) {
           const url = supabase.storage.from('gallery').getPublicUrl(data.path).data.publicUrl;
-          const res = await fetch(`http://localhost:3001/api/media/gallery`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/gallery`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json', 
@@ -149,7 +149,7 @@ export const GalleryPage: React.FC = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       for (const id of selectedImageIds) {
-        await fetch(`http://localhost:3001/api/media/gallery/${id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/gallery/${id}`, {
           method: 'DELETE',
           headers: { 
             'Authorization': `Bearer ${session?.access_token}`,
@@ -185,7 +185,7 @@ export const GalleryPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/media/gallery/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/gallery/${id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
@@ -213,7 +213,7 @@ export const GalleryPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/media/albums/${editAlbum.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/albums/${editAlbum.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json', 
@@ -241,7 +241,7 @@ export const GalleryPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`http://localhost:3001/api/media/albums/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/albums/${id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
