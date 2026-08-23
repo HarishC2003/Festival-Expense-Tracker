@@ -1,0 +1,6 @@
+Failed to create category: insert or update on table "expense_categories" violates foreign key constraint "expense_categories_festival_year_id_fkey"
+Error: Failed to create category: insert or update on table "expense_categories" violates foreign key constraint "expense_categories_festival_year_id_fkey"
+    at Function.createExpense (D:\vinayagar project\backend\src\services\expense.service.ts:38:32)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (D:\vinayagar project\backend\src\routes\expense.routes.ts:38:18)
+{}
