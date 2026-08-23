@@ -83,7 +83,6 @@ export const GalleryPage: React.FC = () => {
     } catch (e) {
       toast.error('Failed to create album');
     } finally {
-      clearInterval(progressInterval);
       setUploadProgress(undefined);
       setIsSubmitting(false);
     }
@@ -423,7 +422,7 @@ export const GalleryPage: React.FC = () => {
         title="Delete Album"
         description="Are you sure you want to delete this album? All photos inside it will also be deleted."
         variant="danger"
-        onConfirm={() => confirmDeleteAlbumId && handleDeleteAlbum(confirmDeleteAlbumId)}
+        onConfirm={() => { if (confirmDeleteAlbumId) handleDeleteAlbum(confirmDeleteAlbumId); }}
         onCancel={() => setConfirmDeleteAlbumId(null)}
       />
 

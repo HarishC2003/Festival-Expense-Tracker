@@ -141,7 +141,7 @@ export const ApprovalQueuePage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {isProcessing && <SubmissionOverlay text="Processing..." />}
+      {isProcessing && <SubmissionOverlay isSubmitting={true} text="Processing..." />}
       {confirmConfig && (
         <ConfirmDialog
           isOpen={confirmConfig.isOpen}

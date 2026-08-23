@@ -166,7 +166,7 @@ export const CashDonationsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {isSubmitting && <SubmissionOverlay text="Processing..." />}
+      {isSubmitting && <SubmissionOverlay isSubmitting={true} text="Saving Cash Donation..." />}
       {confirmConfig && (
         <ConfirmDialog
           isOpen={confirmConfig.isOpen}

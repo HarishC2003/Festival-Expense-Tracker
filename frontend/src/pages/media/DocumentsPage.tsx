@@ -248,7 +248,7 @@ export const DocumentsPage: React.FC = () => {
         title="Delete Document"
         description="Are you sure you want to delete this document?"
         variant="danger"
-        onConfirm={() => confirmDeleteDocId && handleDeleteDoc(confirmDeleteDocId)}
+        onConfirm={() => { if (confirmDeleteDocId) handleDeleteDoc(confirmDeleteDocId); }}
         onCancel={() => setConfirmDeleteDocId(null)}
       />
     </div>

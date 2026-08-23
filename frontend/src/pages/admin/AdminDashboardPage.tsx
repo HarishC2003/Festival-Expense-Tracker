@@ -45,11 +45,11 @@ export function AdminDashboardPage() {
   }, [isPlatformAdmin]);
 
   if (!isPlatformAdmin) {
-    return <ErrorState title="Access Denied" message="You do not have permission to view this page." />;
+    return <ErrorState title="Access Denied" description="You do not have permission to view this page." />;
   }
 
   if (loading) return <PageLoader message="Loading Platform Stats..." />;
-  if (error) return <ErrorState title="Failed to load stats" message={error} onRetry={() => window.location.reload()} />;
+  if (error) return <ErrorState title="Failed to load stats" description={error} onRetry={() => window.location.reload()} />;
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">

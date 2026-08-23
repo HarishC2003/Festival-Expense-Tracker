@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useFestivalYear } from '../../context/FestivalYearContext';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../../components/ui/button';
