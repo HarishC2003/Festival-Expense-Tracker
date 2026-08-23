@@ -33,7 +33,7 @@ export const GroupsPage = () => {
     if (!newGroupName || !newGroupCode) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || `${import.meta.env.VITE_API_URL || "http://localhost:3001"}`}/api/groups`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/groups`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newGroupName, code: newGroupCode, description: newGroupDesc })
@@ -58,7 +58,7 @@ export const GroupsPage = () => {
     if (!joinCode) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || `${import.meta.env.VITE_API_URL || "http://localhost:3001"}`}/api/groups/join`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/groups/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: joinCode })

@@ -51,7 +51,7 @@ export const GroupProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       setLoadingGroups(true);
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`${import.meta.env.VITE_API_URL || `${import.meta.env.VITE_API_URL || "http://localhost:3001"}`}/api/groups/mine`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/groups/mine`, {
         headers: {
           'Authorization': `Bearer ${session?.access_token}`
         }

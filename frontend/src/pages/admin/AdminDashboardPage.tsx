@@ -25,7 +25,7 @@ export function AdminDashboardPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) throw new Error('No session');
 
-        const res = await fetch(`${import.meta.env.VITE_API_URL || `${import.meta.env.VITE_API_URL || "http://localhost:3001"}`}/api/admin/stats`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/admin/stats`, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`
           }
