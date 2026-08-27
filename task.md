@@ -1,0 +1,6 @@
+- [x] Create `api/index.ts`
+- [x] Modify `backend/src/index.ts` to export app
+- [x] Merge `backend/package.json` into root `package.json`
+- [x] Update `vercel.json`
+- [x] Verify everything builds locally
+- [ ] Commit and push
