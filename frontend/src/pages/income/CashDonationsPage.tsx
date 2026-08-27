@@ -213,7 +213,7 @@ export const CashDonationsPage: React.FC = () => {
                     }
                   }
                 }} className="font-display font-bold text-3xl tabular-nums h-16 text-foreground drop-shadow-sm placeholder:text-muted-foreground/50" placeholder="0.00" /></div>
-                <div className="space-y-2"><Label>{t('income.date')}</Label><Input type="date" required value={formData.donation_date} onChange={e => setFormData({...formData, donation_date: e.target.value})} /></div>
+                <div className="space-y-2"><Label>{t('income.date')}</Label><Input type="date" required max={new Date().toISOString().split('T')[0]} value={formData.donation_date} onChange={e => setFormData({...formData, donation_date: e.target.value})} /></div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

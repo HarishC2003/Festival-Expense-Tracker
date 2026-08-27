@@ -341,7 +341,7 @@ export const ExpenseSubmissionPage: React.FC = () => {
           </div>
           <div className="space-y-2">
             <Label>{t('expenses.expenseDate')}</Label>
-            <Input type="date" required value={formData.expense_date} onChange={e => setFormData({...formData, expense_date: e.target.value})} />
+            <Input type="date" required max={new Date().toISOString().split('T')[0]} value={formData.expense_date} onChange={e => setFormData({...formData, expense_date: e.target.value})} />
           </div>
         </div>
 

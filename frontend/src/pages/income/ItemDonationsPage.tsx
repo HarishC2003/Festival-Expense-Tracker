@@ -275,7 +275,7 @@ export const ItemDonationsPage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>{t('income.date')}</Label><Input type="date" required value={formData.donation_date} onChange={e => setFormData({...formData, donation_date: e.target.value})} /></div>
+                <div className="space-y-2"><Label>{t('income.date')}</Label><Input type="date" required max={new Date().toISOString().split('T')[0]} value={formData.donation_date} onChange={e => setFormData({...formData, donation_date: e.target.value})} /></div>
                 <div className="space-y-2">
                   <Label>{t('income.category')}</Label>
                   {!isCustomCategory ? (
