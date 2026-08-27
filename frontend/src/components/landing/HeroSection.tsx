@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { ArrowRight } from 'lucide-react';
 import bgVideo from '../../assets/bgvideo.mp4';
+import heroBg from '../../assets/hero.png';
 
 export const HeroSection: React.FC = () => {
   const navigate = useNavigate();
@@ -60,7 +61,8 @@ export const HeroSection: React.FC = () => {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
+            poster={heroBg}
             className="w-full h-full object-cover object-center"
           >
             <source src={bgVideo} type="video/mp4" />
