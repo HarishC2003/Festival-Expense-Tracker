@@ -72,6 +72,10 @@ export const CashDonationsPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeYear || isLocked) return;
+    if (Number(formData.amount) <= 0) {
+      toast.error(t('income.error', { error: 'Amount must be greater than 0' }) || 'Amount must be greater than 0');
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -204,7 +208,9 @@ export const CashDonationsPage: React.FC = () => {
                 <div className="space-y-2"><Label>{t('income.amount')}</Label><Input type="text" required value={formData.amount ? Number(formData.amount).toLocaleString('en-IN') : ''} onChange={e => {
                   const rawValue = e.target.value.replace(/,/g, '');
                   if (!isNaN(Number(rawValue)) && rawValue !== ' ') {
-                    setFormData({...formData, amount: rawValue});
+                    if (Number(rawValue) >= 0) {
+                      setFormData({...formData, amount: rawValue});
+                    }
                   }
                 }} className="font-display font-bold text-3xl tabular-nums h-16 text-foreground drop-shadow-sm placeholder:text-muted-foreground/50" placeholder="0.00" /></div>
                 <div className="space-y-2"><Label>{t('income.date')}</Label><Input type="date" required value={formData.donation_date} onChange={e => setFormData({...formData, donation_date: e.target.value})} /></div>

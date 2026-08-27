@@ -86,6 +86,9 @@ router.post('/cash_donations', requireAuth, requireGroupAccess(writeRoles), asyn
     const data = await IncomeService.createCashDonation(parsed, req.user.id, req.groupId!);
     res.status(201).json(data);
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+    }
     res.status(400).json({ error: error.message });
   }
 });
@@ -96,6 +99,9 @@ router.put('/cash_donations/:id', requireAuth, requireGroupAccess(['owner']), as
     const data = await IncomeService.updateCashDonation((req.params.id as string), parsed, req.user.id, req.groupId!);
     res.json(data);
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+    }
     res.status(400).json({ error: error.message });
   }
 });
@@ -127,6 +133,9 @@ router.post('/item_donations', requireAuth, requireGroupAccess(writeRoles), asyn
     const data = await IncomeService.createItemDonation(parsed, req.user.id, req.groupId!);
     res.status(201).json(data);
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+    }
     res.status(400).json({ error: error.message });
   }
 });
@@ -137,6 +146,9 @@ router.put('/item_donations/:id', requireAuth, requireGroupAccess(['owner']), as
     const data = await IncomeService.updateItemDonation((req.params.id as string), parsed, req.user.id, req.groupId!);
     res.json(data);
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+    }
     res.status(400).json({ error: error.message });
   }
 });
