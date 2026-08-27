@@ -71,11 +71,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchRole = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      let result = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
-        .maybeSingle(); // Returns null instead of throwing 406 when no row found
+        .maybeSingle(); 
+
+      // Supabase clock drift workaround
+      if (result.error && result.error.message.includes('JWT issued at future')) {
+        console.warn('Clock drift detected, retrying role fetch in 1s...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        result = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle();
+      }
+
+      const { data, error } = result;
 
       if (error) {
         console.error('Failed to fetch role:', error.message);
