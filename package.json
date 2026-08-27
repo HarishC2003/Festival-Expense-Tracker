@@ -5,6 +5,26 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
-    "dotenv": "^17.4.2"
+    "@types/nodemailer": "^8.0.1",
+    "cors": "^2.8.6",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^9.0.5",
+    "pdfkit": "^0.19.1",
+    "pdfkit-table": "^0.2.11",
+    "pg": "^8.23.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.1.1",
+    "@types/pdfkit": "^0.17.6",
+    "typescript": "^5.5.4"
   }
 }
