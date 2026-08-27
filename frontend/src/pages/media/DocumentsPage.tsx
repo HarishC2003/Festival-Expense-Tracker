@@ -31,7 +31,7 @@ export const DocumentsPage: React.FC = () => {
   const fetchDocs = async () => {
     if (!activeYear) return;
     const { data: { session } } = await supabase.auth.getSession();
-    const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/documents?yearId=${activeYear.id}`, { 
+    const res = await fetch(`/api/media/documents?yearId=${activeYear.id}`, { 
       headers: { 
         'Authorization': `Bearer ${session?.access_token}`,
         'X-Group-Id': activeGroupId || ''
@@ -64,7 +64,7 @@ export const DocumentsPage: React.FC = () => {
       if (!error && data) {
         const url = supabase.storage.from('documents').getPublicUrl(data.path).data.publicUrl;
         const { data: { session } } = await supabase.auth.getSession();
-        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/documents`, {
+        const res = await fetch(`/api/media/documents`, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json', 
@@ -99,7 +99,7 @@ export const DocumentsPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/documents/${editDoc.id}`, {
+      const res = await fetch(`/api/media/documents/${editDoc.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json', 
@@ -128,7 +128,7 @@ export const DocumentsPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/media/documents/${id}`, {
+      const res = await fetch(`/api/media/documents/${id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,

@@ -38,7 +38,7 @@ export const ExpensesListPage: React.FC = () => {
     setError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses?yearId=${activeYear.id}`, {
+      const res = await fetch(`/api/expenses?yearId=${activeYear.id}`, {
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
           'X-Group-Id': activeGroupId || ''
@@ -70,7 +70,7 @@ export const ExpensesListPage: React.FC = () => {
       onConfirm: async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses/${id}/reimburse`, {
+          const res = await fetch(`/api/expenses/${id}/reimburse`, {
             method: 'POST',
             headers: { 
               'Authorization': `Bearer ${session?.access_token}`,
@@ -99,7 +99,7 @@ export const ExpensesListPage: React.FC = () => {
       onConfirm: async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses/${id}`, {
+          const res = await fetch(`/api/expenses/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${session?.access_token}`,

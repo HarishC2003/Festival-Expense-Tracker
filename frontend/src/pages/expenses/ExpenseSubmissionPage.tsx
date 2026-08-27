@@ -54,10 +54,10 @@ export const ExpenseSubmissionPage: React.FC = () => {
       };
       
       const [catRes, memRes, venRes, payRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/expense_categories?yearId=${activeYear.id}`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/committee_members?yearId=${activeYear.id}`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/vendors?yearId=${activeYear.id}`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/payment_methods?yearId=${activeYear.id}`, { headers })
+        fetch(`/api/master-data/expense_categories?yearId=${activeYear.id}`, { headers }),
+        fetch(`/api/master-data/committee_members?yearId=${activeYear.id}`, { headers }),
+        fetch(`/api/master-data/vendors?yearId=${activeYear.id}`, { headers }),
+        fetch(`/api/master-data/payment_methods?yearId=${activeYear.id}`, { headers })
       ]);
       
       const cats = await catRes.json();
@@ -73,7 +73,7 @@ export const ExpenseSubmissionPage: React.FC = () => {
       let defaultMember = mems.find((m: any) => m.user_id === user?.id || m.email === user?.email);
       
       if (!defaultMember && user?.email) {
-        const newMemRes = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/master-data/committee_members`, {
+        const newMemRes = await fetch(`/api/master-data/committee_members`, {
           method: 'POST',
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -93,7 +93,7 @@ export const ExpenseSubmissionPage: React.FC = () => {
 
       if (id) {
         try {
-          const expRes = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses?yearId=${activeYear.id}`, { headers });
+          const expRes = await fetch(`/api/expenses?yearId=${activeYear.id}`, { headers });
           if (expRes.ok) {
             const allExp = await expRes.json();
             const exp = allExp.find((e: any) => e.id === id);
@@ -160,8 +160,8 @@ export const ExpenseSubmissionPage: React.FC = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const url = id 
-        ? `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses/${id}` 
-        : `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/expenses`;
+        ? `/api/expenses/${id}` 
+        : `/api/expenses`;
       
       const res = await fetch(url, {
         method: id ? 'PUT' : 'POST',

@@ -18,7 +18,7 @@ export const DonorProfilePage: React.FC = () => {
     const fetchDonor = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/income/donors/${id}/history`, {
+        const res = await fetch(`/api/income/donors/${id}/history`, {
           headers: { 
             'Authorization': `Bearer ${session?.access_token}`,
             'X-Group-Id': activeGroupId || ''

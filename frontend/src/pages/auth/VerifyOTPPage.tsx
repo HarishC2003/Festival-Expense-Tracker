@@ -82,7 +82,7 @@ export const VerifyOTPPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/verify-otp`, {
+      const response = await fetch(`/api/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: state?.userId, code }),
@@ -109,7 +109,7 @@ export const VerifyOTPPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/resend-otp`, {
+      const response = await fetch(`/api/auth/resend-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: state.userId, email: state.email, name: state.name }),

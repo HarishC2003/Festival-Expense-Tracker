@@ -28,7 +28,7 @@ export const ReportsPage: React.FC = () => {
     const fetchData = async () => {
       if (!activeYear || !activeGroupId) return;
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/reports/${reportType}?yearId=${activeYear.id}`, {
+      const res = await fetch(`/api/reports/${reportType}?yearId=${activeYear.id}`, {
         headers: { 
           'Authorization': `Bearer ${session?.access_token}`,
           'X-Group-Id': activeGroupId
@@ -61,7 +61,7 @@ export const ReportsPage: React.FC = () => {
       setIsExportModalOpen(false);
       const { data: { session } } = await supabase.auth.getSession();
       
-      let url = `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/reports/${reportType}/export?yearId=${activeYear.id}&format=${exportFormat}`;
+      let url = `/api/reports/${reportType}/export?yearId=${activeYear.id}&format=${exportFormat}`;
       if (startDate) url += `&startDate=${startDate}`;
       if (endDate) url += `&endDate=${endDate}`;
       

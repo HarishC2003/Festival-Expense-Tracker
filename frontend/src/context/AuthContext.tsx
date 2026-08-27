@@ -120,7 +120,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/logout`, {
+        await fetch(`/api/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session.access_token}`
