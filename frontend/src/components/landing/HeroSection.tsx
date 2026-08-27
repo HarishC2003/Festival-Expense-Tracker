@@ -56,19 +56,15 @@ export const HeroSection: React.FC = () => {
                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 95%)',
                maskImage: 'radial-gradient(circle at center, black 40%, transparent 95%)'
              }}>
-          <motion.div
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroBg})` }}
-            animate={{
-              scale: [1, 1.05, 1],
-              opacity: [0.8, 1, 0.8]
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover object-center"
+          >
+            <source src={bgVideo} type="video/mp4" />
+          </video>
         </div>
         
         {/* The 3-Tier Overlay System */}
