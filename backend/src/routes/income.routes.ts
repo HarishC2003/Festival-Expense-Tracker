@@ -87,7 +87,7 @@ router.post('/cash_donations', requireAuth, requireGroupAccess(writeRoles), asyn
     res.status(201).json(data);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+      return res.status(400).json({ error: error.issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') });
     }
     res.status(400).json({ error: error.message });
   }
@@ -100,7 +100,7 @@ router.put('/cash_donations/:id', requireAuth, requireGroupAccess(['owner']), as
     res.json(data);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+      return res.status(400).json({ error: error.issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') });
     }
     res.status(400).json({ error: error.message });
   }
@@ -134,7 +134,7 @@ router.post('/item_donations', requireAuth, requireGroupAccess(writeRoles), asyn
     res.status(201).json(data);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+      return res.status(400).json({ error: error.issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') });
     }
     res.status(400).json({ error: error.message });
   }
@@ -147,7 +147,7 @@ router.put('/item_donations/:id', requireAuth, requireGroupAccess(['owner']), as
     res.json(data);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') });
+      return res.status(400).json({ error: error.issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') });
     }
     res.status(400).json({ error: error.message });
   }

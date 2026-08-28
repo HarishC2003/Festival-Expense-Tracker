@@ -8,7 +8,7 @@ const router = Router();
 const writeRoles = ['owner', 'editor'];
 
 const schemas: Record<string, z.ZodTypeAny> = {
-  committee_members: z.object({ name: z.string().min(1), phone: z.string().optional(), role: z.string().min(1), status: z.string().min(1), festival_year_id: z.string().uuid() }),
+  committee_members: z.object({ name: z.string().min(1), email: z.string().email().optional().nullable(), phone: z.string().optional().nullable(), role_title: z.string().optional().nullable(), active: z.boolean().optional(), festival_year_id: z.string().uuid() }),
   vendor_categories: z.object({ name: z.string().min(1), description: z.string().optional(), festival_year_id: z.string().uuid() }),
   vendors: z.object({ name: z.string().min(1), contact_person: z.string().optional(), phone: z.string().optional(), category_id: z.string().uuid().optional().nullable(), festival_year_id: z.string().uuid() }),
   income_categories: z.object({ name: z.string().min(1), type: z.string().min(1), festival_year_id: z.string().uuid() }),

@@ -12,6 +12,22 @@ const generateCode = (): string => {
 
 export class GroupService {
   static async createGroup(name: string, description: string | undefined, ownerId: string) {
+    if (name.trim().length < 3) {
+      throw new Error('Group name must be at least 3 characters long.');
+    }
+
+    // Check if group name already exists globally
+    const { data: existingGroup } = await supabaseAdmin
+      .from('groups')
+      .select('id')
+      .ilike('name', name.trim())
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (existingGroup) {
+      throw new Error(`A group with the name "${name.trim()}" already exists. Please choose a unique name.`);
+    }
+
     let code = '';
     let group = null;
     let attempts = 0;
@@ -22,7 +38,7 @@ export class GroupService {
       const { data, error } = await supabaseAdmin
         .from('groups')
         .insert({
-          name,
+          name: name.trim(),
           description,
           code,
           owner_id: ownerId,

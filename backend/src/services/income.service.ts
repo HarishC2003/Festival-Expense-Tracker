@@ -40,14 +40,14 @@ export class IncomeService {
   }
 
   // --- RECEIPT HELPER ---
-  static async generateReceiptNumber(prefix: string, yearId: string, yearText: string) {
+  static async generateReceiptNumber(prefix: string, groupId: string, groupCode: string) {
     const { data, error } = await supabaseAdmin.rpc('generate_receipt_number', {
       p_prefix: prefix,
-      p_year_id: yearId,
-      p_year_text: yearText
+      p_group_id: groupId,
+      p_group_code: groupCode
     });
     if (error) throw error;
-    return data; // e.g. 'CD-2026-0001'
+    return data; // e.g. 'CD-A8K2M9-00001'
   }
 
   // --- CASH DONATIONS ---
@@ -64,10 +64,10 @@ export class IncomeService {
   }
 
   static async createCashDonation(data: any, userId: string, groupId: string) {
-    const { data: year } = await supabaseAdmin.from('festival_years').select('year').eq('id', data.festival_year_id).eq('group_id', groupId).single();
-    if (!year) throw new Error('Invalid year');
+    const { data: group } = await supabaseAdmin.from('groups').select('code').eq('id', groupId).single();
+    if (!group) throw new Error('Invalid group');
 
-    const receipt_number = await this.generateReceiptNumber('CD', data.festival_year_id, year.year.toString());
+    const receipt_number = await this.generateReceiptNumber('CD', groupId, group.code);
 
     // 1. Auto-lookup or create Donor
     let donor_id = data.donor_id;
@@ -211,10 +211,10 @@ export class IncomeService {
   }
 
   static async createItemDonation(data: any, userId: string, groupId: string) {
-    const { data: year } = await supabaseAdmin.from('festival_years').select('year').eq('id', data.festival_year_id).eq('group_id', groupId).single();
-    if (!year) throw new Error('Invalid year');
+    const { data: group } = await supabaseAdmin.from('groups').select('code').eq('id', groupId).single();
+    if (!group) throw new Error('Invalid group');
 
-    const receipt_number = await this.generateReceiptNumber('ID', data.festival_year_id, year.year.toString());
+    const receipt_number = await this.generateReceiptNumber('ID', groupId, group.code);
 
     // 1. Auto-lookup or create Donor
     let donor_id = data.donor_id;

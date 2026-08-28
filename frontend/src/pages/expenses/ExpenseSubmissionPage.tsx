@@ -23,11 +23,14 @@ export const ExpenseSubmissionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   
   const [categories, setCategories] = useState<any[]>([]);
-  const [members, setMembers] = useState<any[]>([]);
+  const [members, setMembers] = useState<any[]>([]); // committee_members
+  const [groupMembers, setGroupMembers] = useState<any[]>([]); // registered app users in the group
   const [vendors, setVendors] = useState<any[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [isCustomVendor, setIsCustomVendor] = useState(false);
+  const [isCustomPaidBy, setIsCustomPaidBy] = useState(false);
+  const [customPaidByName, setCustomPaidByName] = useState('');
   const [successData, setSuccessData] = useState<any | null>(null);
 
   const [formData, setFormData] = useState({
@@ -53,22 +56,25 @@ export const ExpenseSubmissionPage: React.FC = () => {
         'X-Group-Id': activeGroupId || ''
       };
       
-      const [catRes, memRes, venRes, payRes] = await Promise.all([
+      const [catRes, memRes, venRes, payRes, groupMemRes] = await Promise.all([
         fetch(`/api/master-data/expense_categories?yearId=${activeYear.id}`, { headers }),
         fetch(`/api/master-data/committee_members?yearId=${activeYear.id}`, { headers }),
         fetch(`/api/master-data/vendors?yearId=${activeYear.id}`, { headers }),
-        fetch(`/api/master-data/payment_methods?yearId=${activeYear.id}`, { headers })
+        fetch(`/api/master-data/payment_methods?yearId=${activeYear.id}`, { headers }),
+        fetch(`/api/groups/members`, { headers })
       ]);
       
       const cats = await catRes.json();
       const mems = await memRes.json();
       const vens = await venRes.json();
       const pays = await payRes.json();
+      const groupMems = groupMemRes.ok ? await groupMemRes.json() : [];
       
       setCategories(cats);
       setMembers(mems);
       setVendors(vens);
       setPaymentMethods(pays);
+      setGroupMembers(groupMems.filter((gm: any) => gm.status === 'approved'));
 
       let defaultMember = mems.find((m: any) => m.user_id === user?.id || m.email === user?.email);
       
@@ -78,7 +84,7 @@ export const ExpenseSubmissionPage: React.FC = () => {
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             festival_year_id: activeYear.id,
-            name: user.email.split('@')[0],
+            name: user.user_metadata?.name || user.user_metadata?.full_name || user.email.split('@')[0],
             email: user.email,
             role_title: 'Member'
           })
@@ -157,6 +163,38 @@ export const ExpenseSubmissionPage: React.FC = () => {
       }
     }
 
+    let finalPaidById = formData.paid_by;
+    // Check if the selected paid_by is a group_member (user_id) that is NOT in committee_members
+    if (!members.find(m => m.id === finalPaidById)) {
+      const selectedGroupMember = groupMembers.find(gm => gm.user_id === finalPaidById);
+      if (selectedGroupMember) {
+        const { data: { session } } = await supabase.auth.getSession();
+        const res = await fetch(`/api/master-data/committee_members`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session?.access_token}`,
+            'X-Group-Id': activeGroupId || ''
+          },
+          body: JSON.stringify({
+            festival_year_id: activeYear.id,
+            name: selectedGroupMember.users?.name || selectedGroupMember.users?.email.split('@')[0],
+            email: selectedGroupMember.users?.email,
+            role_title: 'Member'
+          })
+        });
+        if (res.ok) {
+          const newMem = await res.json();
+          setMembers(prev => [...prev, newMem]);
+          finalPaidById = newMem.id;
+        } else {
+          toast.error('Failed to sync group member to committee members');
+          setIsSubmitting(false);
+          return;
+        }
+      }
+    }
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const url = id 
@@ -172,6 +210,7 @@ export const ExpenseSubmissionPage: React.FC = () => {
         },
         body: JSON.stringify({ 
           ...formData, 
+          paid_by: finalPaidById,
           amount: Number(formData.amount),
           festival_year_id: activeYear.id, 
           ...(receipt_image_url ? { receipt_image_url } : {})
@@ -269,16 +308,79 @@ export const ExpenseSubmissionPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2 z-20">
             <Label>Paid By</Label>
-            <select 
-              required
-              className="flex h-12 w-full border-b border-brass/30 bg-transparent px-4 py-2 text-base text-textPrimary focus-visible:outline-none focus-visible:border-brass transition-colors"
-              value={formData.paid_by}
-              onChange={e => setFormData({...formData, paid_by: e.target.value})}
-            >
-              {members.map((m: any) => (
-                <option key={m.id} value={m.id} className="bg-surface text-textPrimary">{m.name}</option>
-              ))}
-            </select>
+            {!isCustomPaidBy ? (
+              <select 
+                required
+                className="flex h-12 w-full border-b border-brass/30 bg-transparent px-4 py-2 text-base text-textPrimary focus-visible:outline-none focus-visible:border-brass transition-colors"
+                value={formData.paid_by}
+                onChange={e => {
+                  if (e.target.value === 'ADD_NEW') {
+                    setIsCustomPaidBy(true);
+                    setCustomPaidByName('');
+                  } else {
+                    setFormData({...formData, paid_by: e.target.value});
+                  }
+                }}
+              >
+                {members.map((m: any) => (
+                  <option key={m.id} value={m.id} className="bg-surface text-textPrimary">{m.name}</option>
+                ))}
+                {groupMembers
+                  .filter(gm => !members.find(m => m.email === gm.users?.email || m.user_id === gm.user_id))
+                  .map((gm: any) => (
+                    <option key={gm.user_id} value={gm.user_id} className="bg-surface text-textPrimary">
+                      {gm.users?.name || gm.users?.email?.split('@')[0]}
+                    </option>
+                  ))
+                }
+                <option value="ADD_NEW" className="bg-surface text-primary">+ Add New Member...</option>
+              </select>
+            ) : (
+              <div className="flex gap-2">
+                <Input 
+                  type="text" 
+                  required 
+                  autoFocus
+                  placeholder="Type new member name..." 
+                  value={customPaidByName} 
+                  onChange={e => setCustomPaidByName(e.target.value)} 
+                />
+                <Button type="button" variant="default" onClick={async () => {
+                  if (customPaidByName.trim()) {
+                    try {
+                      const { data: { session } } = await supabase.auth.getSession();
+                      const res = await fetch(`/api/master-data/committee_members`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${session?.access_token}`,
+                          'X-Group-Id': activeGroupId || ''
+                        },
+                        body: JSON.stringify({
+                          festival_year_id: activeYear?.id,
+                          name: customPaidByName,
+                          role_title: 'Member'
+                        })
+                      });
+                      if (res.ok) {
+                        const newMem = await res.json();
+                        setMembers([...members, newMem]);
+                        setFormData({...formData, paid_by: newMem.id});
+                      } else {
+                        toast.error('Failed to add member');
+                      }
+                    } catch (e) {
+                      toast.error('Failed to add member');
+                    }
+                    setIsCustomPaidBy(false);
+                  }
+                }}>Done</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsCustomPaidBy(false);
+                  setFormData({...formData, paid_by: members.length > 0 ? members[0].id : ''});
+                }}>Cancel</Button>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2 z-20">

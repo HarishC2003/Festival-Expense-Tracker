@@ -65,6 +65,12 @@
     font-size: inherit;
   }
 
+  /* Make date picker calendar icon white on dark background */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+    cursor: pointer;
+  }
+
   /* Make sure select options are visible in dark mode */
   option {
     background-color: #1E293B;

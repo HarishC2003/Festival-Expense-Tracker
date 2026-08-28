@@ -24,28 +24,27 @@ export const GroupsPage = () => {
 
   // Form states
   const [newGroupName, setNewGroupName] = useState('');
-  const [newGroupCode, setNewGroupCode] = useState('');
   const [newGroupDesc, setNewGroupDesc] = useState('');
   const [joinCode, setJoinCode] = useState('');
 
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newGroupName || !newGroupCode) return;
+    if (!newGroupName) return;
     setLoading(true);
     try {
       const res = await fetch(`/api/groups`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newGroupName, code: newGroupCode, description: newGroupDesc })
+        body: JSON.stringify({ name: newGroupName, description: newGroupDesc })
       });
       if (res.ok) {
         await refreshGroups();
         setIsCreating(false);
         setNewGroupName('');
-        setNewGroupCode('');
         setNewGroupDesc('');
       } else {
-        toast.error('Failed to create group');
+        const errData = await res.json();
+        toast.error(errData.error || 'Failed to create group');
       }
     } catch (err) {
       console.error(err);
@@ -235,17 +234,6 @@ export const GroupsPage = () => {
                 placeholder="e.g. Anna Nagar Vinayagar Committee" 
                 required 
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Unique Code</label>
-              <Input 
-                value={newGroupCode} 
-                onChange={e => setNewGroupCode(e.target.value.replace(/[^A-Za-z0-9-_]/g, '').toUpperCase())} 
-                placeholder="e.g. ANNANAGAR-2024" 
-                required 
-                className="font-mono text-brass text-lg tracking-widest drop-shadow-sm"
-              />
-              <p className="text-xs text-muted-foreground">Used by others to request to join.</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Description (Optional)</label>
